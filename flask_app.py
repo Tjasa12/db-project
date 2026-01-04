@@ -133,9 +133,23 @@ def logout():
 def index():
     # GET
     if request.method == "GET":
-
         return render_template("willkommen.html")
 
+# App routes
+@app.route("/zutaten", methods=["GET", "POST"])
+@login_required
+def zutaten():
+    # GET
+    if request.method == "GET":
+        return render_template("zutaten.html")
+
+# App routes
+@app.route("/backstube", methods=["GET", "POST"])
+@login_required
+def backstube():
+    # GET
+    if request.method == "GET":
+        return render_template("backstuben.html")
 
 
 
