@@ -3,6 +3,7 @@ import hmac
 import logging
 import os
 
+import git
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
@@ -48,11 +49,10 @@ def webhook():
     return 'Unathorized', 401
 
 # Auth routes
-@app.get("/users")
-def users():
-    return "Hallo from users"
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
+    error = None
 
     if request.method == "POST":
         user = authenticate(
