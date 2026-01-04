@@ -1,13 +1,14 @@
-from flask import Flask, redirect, render_template, request, url_for
-from dotenv import load_dotenv
-import os
-import git
-import hmac
 import hashlib
-from db import db_read, db_write
-from auth import login_manager, authenticate, register_user
-from flask_login import login_user, logout_user, login_required, current_user
+import hmac
 import logging
+import os
+
+from dotenv import load_dotenv
+from flask import Flask, redirect, render_template, request, url_for
+from flask_login import current_user, login_required, login_user, logout_user
+
+from auth import authenticate, login_manager, register_user
+from db import db_read, db_write
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -48,9 +49,10 @@ def webhook():
 
 # Auth routes
 @app.get("/users")
-@app.route("/login", methods=["GET", "POST"])
 def users():
     return "Hallo from users"
+@app.route("/login", methods=["GET", "POST"])
+def login():
 
     if request.method == "POST":
         user = authenticate(
