@@ -149,7 +149,7 @@ def zutaten():
 def backstube():
     # GET
     if request.method == "GET":
-        return render_template("backstuben.html")
+        return render_template("backstube.html")
 
 
 
