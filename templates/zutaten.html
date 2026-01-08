@@ -4,7 +4,8 @@
     <div>
       <h1>Zutatenseite</h1>
       {% for zutate in zutaten %}
-    <p>{{ zutate.name }}</p>
+    <input type="checkbox" id ="{{zutate.id}}"
+    name="{{zutate.name}}"/>
   {% endfor %}
       <a href="/" class="btn btn-secondary">Zurück</a>
     </div>
