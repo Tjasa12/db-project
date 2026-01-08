@@ -3,7 +3,9 @@
 {% block content %}
     <div>
       <h1>Zutatenseite</h1>
-      <p> {{zutaten}} </p>
+      {% for zutate in zutaten %}
+    <p>{{ zutate.name }}</p>
+  {% endfor %}
       <a href="/" class="btn btn-secondary">Zurück</a>
     </div>
 
