@@ -131,9 +131,10 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # GET
+    # GET 
+    Test = "Hallo"
     if request.method == "GET":
-        return render_template("willkommen.html")
+        return render_template("willkommen.html",Template_test=Test)
 
 # App routes
 @app.route("/zutaten", methods=["GET", "POST"])
