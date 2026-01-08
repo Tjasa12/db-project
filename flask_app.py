@@ -3,6 +3,7 @@ import hmac
 import logging
 import os
 
+
 import git
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
@@ -15,6 +16,9 @@ logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
+
+# Logger für dieses Modul
+logger = logging.getLogger(__name__)
 
 # Load .env variables
 load_dotenv()
@@ -142,7 +146,15 @@ def index():
 def zutaten():
     # GET
     if request.method == "GET":
-        return render_template("zutaten.html")
+        try:
+            row = db_read(
+                "SELECT * FROM Zutaten;")
+            logger.debug("Zutaten DB-Ergebnis: %r", row)
+        except Exception:
+            logger.exception("Fehler bei Zutaten abfrage")
+            return None
+
+        return render_template("zutaten.html", zutaten=row)
 
 # App routes
 @app.route("/backstube", methods=["GET", "POST"])
