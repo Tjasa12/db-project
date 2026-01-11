@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div>
-      <h1>Zutatenseite</h1>
-      {% for zutate in zutaten %}
-    <input type="checkbox" id ="{{zutate.id}}"
-    name="{{zutate.name}}"> {{zutate.name}}</input>
-    <br/>
-  {% endfor %}
-  <a href="/Rezepte" class="btn btn-primary">Rezepte anzeigen</a>
+  <div>
+    <h1>Zutatenseite</h1>
+
+    <form action="{{ url_for('rezepte') }}" method="POST">
+      {% for z in zutaten %}
+        <div>
+          <label>
+            <input type="checkbox" name="zutat_ids" value="{{ z.id }}">
+            {{ z.name }}
+          </label>
+        </div>
+      {% endfor %}
+
+      <br>
+      <button type="submit" class="btn btn-primary">Rezepte anzeigen</button>
       <a href="/" class="btn btn-secondary">Zurück</a>
-    </div>
-
+    </form>
+  </div>
 {% endblock %}
-
