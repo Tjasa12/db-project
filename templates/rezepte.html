@@ -7,23 +7,20 @@
     <p><strong>{{ message }}</strong></p>
   {% endif %}
 
-  {% if rezepte and rezepte|length > 0 %}
+  <hr>
+
+  <h2>✅ Passende Rezepte (0 fehlende Zutaten)</h2>
+
+  {% if exact and exact|length > 0 %}
     <div class="row">
-      {% for r in rezepte %}
+      {% for r in exact %}
         <div class="col-sm-6 col-md-4">
           <div class="thumbnail">
-            <!-- Ihr habt noch kein Bild in der DB:
-                 Deshalb erstmal Platzhalter-Bild -->
             <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
-
             <div class="caption">
               <h3>{{ r.titel }}</h3>
               <p>{{ r.website_name }}</p>
-
-              {% if r.missing is not none and r.missing > 0 %}
-                <p><em>Fehlende Zutaten: {{ r.missing }}</em></p>
-              {% endif %}
-
+              <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
               <p>
                 <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
               </p>
@@ -31,11 +28,40 @@
           </div>
         </div>
       {% endfor %}
-      <br>
-      <a href="/zutaten" class="btn btn-default">Zurück</a>
     </div>
   {% else %}
-    <p>Keine Rezepte gefunden.</p>
-    <a href="/zutaten" class="btn btn-default">Zurück</a>
+    <p><em>keine Ergebnisse</em></p>
   {% endif %}
+
+  <hr>
+
+  <h2>🟡 Fast passende Rezepte (brauchen noch Zutaten)</h2>
+
+  {% if almost and almost|length > 0 %}
+    <div class="row">
+      {% for r in almost %}
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
+            <div class="caption">
+              <h3>{{ r.titel }}</h3>
+              <p>{{ r.website_name }}</p>
+              <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
+              <p>
+                <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p><em>keine fast passenden Rezepte gefunden</em></p>
+  {% endif %}
+
+  <hr>
+
+  <a href="/zutaten" class="btn btn-default">Zurück zu Zutaten</a>
+
 {% endblock %}
+
