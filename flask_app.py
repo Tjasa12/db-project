@@ -3,7 +3,6 @@ import hmac
 import logging
 import os
 
-
 import git
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
@@ -135,7 +134,7 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # GET 
+    # GET
     Test = "Hallo"
     if request.method == "GET":
         return render_template("willkommen.html",Template_test=Test)
@@ -173,5 +172,63 @@ def complete():
     db_write("DELETE FROM todos WHERE user_id=%s AND id=%s", (current_user.id, todo_id,))
     return redirect(url_for("index"))
 
+
+@app.route("/rezepte", methods=["POST"])
+@login_required
+def rezepte():
+    # 1) angekreuzte Zutaten-IDs aus dem Formular holen
+    selected_ids = request.form.getlist("zutat_ids")  # z.B. ["1", "5", "9"]
+
+    # Wenn nichts ausgewählt wurde
+    if not selected_ids:
+        return render_template("rezepte.html", rezepte=[], message="Bitte wähle mindestens eine Zutat aus.")
+
+    # IDs zu int machen (sauberer)
+    selected_ids = [int(x) for x in selected_ids]
+
+    # 2) SQL Platzhalter für IN-Klausel bauen: %s,%s,%s ...
+    placeholders = ",".join(["%s"] * len(selected_ids))
+
+    # 3) Normalablauf: Rezepte finden, deren Zutaten komplett in selected_ids enthalten sind
+    # missing = COUNT(*) - SUM(zutat_id IN selected_ids)
+    sql_exact = f"""
+        SELECT
+            r.id, r.titel, r.link, r.website_name,
+            (COUNT(*) - SUM(rz.zutat_id IN ({placeholders}))) AS missing
+        FROM Rezepte r
+        JOIN Rezept_Zutaten rz ON rz.rezept_id = r.id
+        GROUP BY r.id, r.titel, r.link, r.website_name
+        HAVING missing = 0
+        ORDER BY r.titel;
+    """
+
+    exact = db_read(sql_exact, tuple(selected_ids))
+
+    # 4) Wenn nichts gefunden: Alternative (wenigste fehlende Zutaten)
+    if not exact:
+        sql_alt = f"""
+            SELECT
+                r.id, r.titel, r.link, r.website_name,
+                (COUNT(*) - SUM(rz.zutat_id IN ({placeholders}))) AS missing
+            FROM Rezepte r
+            JOIN Rezept_Zutaten rz ON rz.rezept_id = r.id
+            GROUP BY r.id, r.titel, r.link, r.website_name
+            ORDER BY missing ASC, r.titel
+            LIMIT 10;
+        """
+
+        alt = db_read(sql_alt, tuple(selected_ids))
+
+        return render_template(
+            "rezepte.html",
+            rezepte=alt,
+            message="Kein Rezept passt exakt. Hier sind Rezepte mit den wenigsten fehlenden Zutaten:"
+        )
+
+    # 5) Treffer gefunden
+    return render_template("rezepte.html", rezepte=exact, message="Passende Rezepte:")
+
+
 if __name__ == "__main__":
     app.run()
+

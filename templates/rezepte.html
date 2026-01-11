@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Rezepte</h1>
+
+  {% if message %}
+    <p><strong>{{ message }}</strong></p>
+  {% endif %}
+
+  {% if rezepte and rezepte|length > 0 %}
+    <div class="row">
+      {% for r in rezepte %}
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <!-- Ihr habt noch kein Bild in der DB:
+                 Deshalb erstmal Platzhalter-Bild -->
+            <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
+
+            <div class="caption">
+              <h3>{{ r.titel }}</h3>
+              <p>{{ r.website_name }}</p>
+
+              {% if r.missing is not none and r.missing > 0 %}
+                <p><em>Fehlende Zutaten: {{ r.missing }}</em></p>
+              {% endif %}
+
+              <p>
+                <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      <br>
+      <a href="/zutaten" class="btn btn-default">Zurück</a>
+    </div>
+  {% else %}
+    <p>Keine Rezepte gefunden.</p>
+    <a href="/zutaten" class="btn btn-default">Zurück</a>
+  {% endif %}
+{% endblock %}
