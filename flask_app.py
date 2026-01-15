@@ -3,7 +3,6 @@ import hmac
 import logging
 import os
 
-
 import git
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for
@@ -135,7 +134,7 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # GET 
+    # GET
     Test = "Hallo"
     if request.method == "GET":
         return render_template("willkommen.html",Template_test=Test)
@@ -156,13 +155,19 @@ def zutaten():
 
         return render_template("zutaten.html", zutaten=row)
 
-# App routes
-@app.route("/backstube", methods=["GET", "POST"])
+@app.route("/backstube", methods=["GET"])
 @login_required
 def backstube():
-    # GET
-    if request.method == "GET":
-        return render_template("backstube.html")
+    rezepte = db_read("""
+        SELECT r.id, r.titel, r.link, r.website_name
+        FROM Backstube b
+        JOIN Rezepte r ON r.id = b.rezept_id
+        WHERE b.user_id = %s
+        ORDER BY b.created_at DESC
+    """, (current_user.id,))
+
+    return render_template("backstube.html", rezepte=rezepte)
+
 
 
 
@@ -173,5 +178,82 @@ def complete():
     db_write("DELETE FROM todos WHERE user_id=%s AND id=%s", (current_user.id, todo_id,))
     return redirect(url_for("index"))
 
+
+@app.route("/rezepte", methods=["POST"])
+@login_required
+def rezepte():
+    selected_ids = request.form.getlist("zutat_ids")
+
+    if not selected_ids:
+        return render_template(
+            "rezepte.html",
+            exact=[],
+            almost=[],
+            message="Bitte wähle mindestens eine Zutat aus."
+        )
+
+    selected_ids = [int(x) for x in selected_ids]
+    placeholders = ",".join(["%s"] * len(selected_ids))
+
+    # 1) Exakt passende Rezepte (missing = 0)
+    sql_exact = f"""
+        SELECT
+            r.id, r.titel, r.link, r.website_name,
+            (COUNT(*) - SUM(rz.zutat_id IN ({placeholders}))) AS missing
+        FROM Rezepte r
+        JOIN Rezept_Zutaten rz ON rz.rezept_id = r.id
+        GROUP BY r.id, r.titel, r.link, r.website_name
+        HAVING missing = 0
+        ORDER BY r.titel;
+    """
+    exact = db_read(sql_exact, tuple(selected_ids))
+
+    # 2) Fast passende Rezepte (missing > 0)
+    sql_almost = f"""
+        SELECT
+            r.id, r.titel, r.link, r.website_name,
+            (COUNT(*) - SUM(rz.zutat_id IN ({placeholders}))) AS missing
+        FROM Rezepte r
+        JOIN Rezept_Zutaten rz ON rz.rezept_id = r.id
+        GROUP BY r.id, r.titel, r.link, r.website_name
+        HAVING missing > 0
+        ORDER BY missing ASC, r.titel
+        LIMIT 10;
+    """
+    almost = db_read(sql_almost, tuple(selected_ids))
+
+    return render_template(
+        "rezepte.html",
+        exact=exact,
+        almost=almost,
+        message="Hier sind deine Ergebnisse:"
+    )
+
+@app.post("/backstube/toggle")
+@login_required
+def backstube_toggle():
+    rezept_id = int(request.form["rezept_id"])
+
+    # Prüfen ob schon drin
+    existing = db_read(
+        "SELECT 1 FROM Backstube WHERE user_id=%s AND rezept_id=%s",
+        (current_user.id, rezept_id)
+    )
+
+    if existing:
+        db_write(
+            "DELETE FROM Backstube WHERE user_id=%s AND rezept_id=%s",
+            (current_user.id, rezept_id)
+        )
+        return {"saved": False}
+
+    db_write(
+        "INSERT INTO Backstube (user_id, rezept_id) VALUES (%s, %s)",
+        (current_user.id, rezept_id)
+    )
+    return {"saved": True}
+
+
 if __name__ == "__main__":
     app.run()
+
