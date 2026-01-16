@@ -1,75 +1,75 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Rezepte</h1>
+<h1>Rezepte</h1>
 
-  {% if message %}
-    <p><strong>{{ message }}</strong></p>
-  {% endif %}
+{% if message %}
+<p><strong>{{ message }}</strong></p>
+{% endif %}
 
-  <hr>
+<hr>
 
-  <h2>✅ Passende Rezepte (0 fehlende Zutaten)</h2>
+<h2>✅ Passende Rezepte (0 fehlende Zutaten)</h2>
 
-  {% if exact and exact|length > 0 %}
-    <div class="row">
-      {% for r in exact %}
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail recipe-card">
-  <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
-    <img class="pin-icon" src="{{ url_for('static', filename='rolling-pin.png') }}" alt="Wallholz">
-  </button>
-            <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
-            <div class="caption">
-              <h3>{{ r.titel }}</h3>
-              <p>{{ r.website_name }}</p>
-              <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
-              <p>
-                <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
-                <a href="/like/{{ r.id }}" class="btn btn-pink">
-                   ❤️ {{ like_counts.get(r.id, 0) }}
-               </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <p><em>keine Ergebnisse</em></p>
-  {% endif %}
-
-  <hr>
-
-  <h2>🟡 Fast passende Rezepte (brauchen noch Zutaten)</h2>
-
-  {% if almost and almost|length > 0 %}
-    <div class="row">
-      {% for r in almost %}
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail recipe-card">
-  <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
-    <img class="pin-icon" src="{{ url_for('static', filename='noun-dough-selected.svg') }}" alt="W">
-  </button>
-            <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
-            <div class="caption">
-              <h3>{{ r.titel }}</h3>
-              <p>{{ r.website_name }}</p>
-              <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
-              <p>
-                <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
-                <a href="/like/{{ r.id }}" class="btn btn-pink">
+{% if exact and exact|length > 0 %}
+<div class="row">
+  {% for r in exact %}
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail recipe-card">
+      <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
+        <img class="pin-icon" src="{{ url_for('static', filename='noun-dough-selected.svg') }}" alt="w">
+      </button>
+      <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
+      <div class="caption">
+        <h3>{{ r.titel }}</h3>
+        <p>{{ r.website_name }}</p>
+        <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
+        <p>
+          <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
+          <a href="/like/{{ r.id }}" class="btn btn-pink">
             ❤️ {{ like_counts.get(r.id, 0) }}
-            </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
+          </a>
+        </p>
+      </div>
     </div>
-  {% else %}
-    <p><em>keine fast passenden Rezepte gefunden</em></p>
-  {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p><em>keine Ergebnisse</em></p>
+{% endif %}
+
+<hr>
+
+<h2>🟡 Fast passende Rezepte (brauchen noch Zutaten)</h2>
+
+{% if almost and almost|length > 0 %}
+<div class="row">
+  {% for r in almost %}
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail recipe-card">
+      <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
+        <img class="pin-icon" src="{{ url_for('static', filename='noun-dough-selected.svg') }}" alt="W">
+      </button>
+      <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
+      <div class="caption">
+        <h3>{{ r.titel }}</h3>
+        <p>{{ r.website_name }}</p>
+        <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
+        <p>
+          <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
+          <a href="/like/{{ r.id }}" class="btn btn-pink">
+            ❤️ {{ like_counts.get(r.id, 0) }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p><em>keine fast passenden Rezepte gefunden</em></p>
+{% endif %}
 <script>
   document.querySelectorAll(".pin-btn").forEach(btn => {
     btn.addEventListener("click", async (e) => {
@@ -92,10 +92,8 @@
     });
   });
 </script>
-  <hr>
+<hr>
 
-  <a href="/zutaten" class="btn btn-default">Zurück zu Zutaten</a>
+<a href="/zutaten" class="btn btn-default">Zurück zu Zutaten</a>
 
 {% endblock %}
-
-

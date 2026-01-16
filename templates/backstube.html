@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div>
-    <h1>Backstube</h1>
+<div>
+  <h1>Backstube</h1>
 
-    {% if rezepte and rezepte|length > 0 %}
-      <ul class="list-group">
-        {% for r in rezepte %}
-          <li class="list-group-item">
-            <strong>{{ r.titel }}</strong>
-            <br>
-            <small>{{ r.website_name }}</small>
-            <br>
-            <a href="{{ r.link }}" target="_blank">Zum Rezept</a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p><em>Noch keine Rezepte in der Backstube.</em></p>
-    {% endif %}
+  {% if rezepte and rezepte|length > 0 %}
+  <ul class="list-group">
+    {% for r in rezepte %}
+    <li class="list-group-item">
+      <strong>{{ r.titel }}</strong>
+      <br>
+      <small>{{ r.website_name }}</small>
+      <br>
+      <a href="{{ r.link }}" target="_blank">Zum Rezept</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p><em>Noch keine Rezepte in der Backstube.</em></p>
+  {% endif %}
 
-    <a href="/" class="btn btn-secondary">Zurück</a>
-  </div>
+  <a href="/" class="btn btn-secondary">Zurück</a>
+</div>
 {% endblock %}
