@@ -35,4 +35,26 @@
   </div>
   <a href="/" class="btn btn-secondary">Zurück</a>
 </div>
+<script>
+  document.querySelectorAll(".pin-btn").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const rezeptId = btn.dataset.rezeptId;
+      const formData = new FormData();
+      formData.append("rezept_id", rezeptId);
+
+      const res = await fetch("/backstube/toggle", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+
+      // UI-Update (grüner Rand wenn gespeichert)
+      if (data.saved) btn.classList.add("saved");
+      else btn.classList.remove("saved");
+    });
+  });
+</script>
 {% endblock %}
