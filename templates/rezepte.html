@@ -26,6 +26,9 @@
               <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
               <p>
                 <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
+                <a href="/like/{{ r.id }}" class="btn btn-pink">
+                   ❤️ {{ like_counts.get(r.id, 0) }}
+               </a>
               </p>
             </div>
           </div>
@@ -55,6 +58,9 @@
               <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
               <p>
                 <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
+                <a href="/like/{{ r.id }}" class="btn btn-pink">
+            ❤️ {{ like_counts.get(r.id, 0) }}
+            </a>
               </p>
             </div>
           </div>

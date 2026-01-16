@@ -168,7 +168,14 @@ def backstube():
 
     return render_template("backstube.html", rezepte=rezepte)
 
-
+@app.route("/like/<int:rezept_id")
+@login_required
+def like_rezept(rezept_id):
+    db_write(
+        "INSERT INTO likes (user_id,rezept_id) VALUES (%s, %s)",
+        (current_user.id, rezept_id)
+    )
+    return redirect(request.referrer)
 
 
 @app.post("/complete")
@@ -221,6 +228,8 @@ def rezepte():
         LIMIT 10;
     """
     almost = db_read(sql_almost, tuple(selected_ids))
+    rows = db_read("SELECT rezept_id, COUNT(*) FROM Likes GROUP BY rezept_id")
+    like_counts = {rid: c for (rid, c) in rows} if rows else {}
 
     return render_template(
         "rezepte.html",
