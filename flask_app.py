@@ -135,8 +135,7 @@ def logout():
 def index():
     # GET
     sql_all = f"""
-        SELECT r.id, r.titel, r.link, r.website_name,
-        FROM Rezepte r ORDER BY r.titel;
+        SELECT r.id, r.titel, r.link, r.website_name FROM Rezepte r ORDER BY r.titel;
     """
     all_rezept = db_read(sql_all)
 
