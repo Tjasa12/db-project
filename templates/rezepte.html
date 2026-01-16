@@ -14,7 +14,7 @@
 {% if exact and exact|length > 0 %}
 <div class="row recipe-row">
   {% for r in exact %}
-  <div class="col-sm-6 col-md-4">
+  <div class="col-xs-12 col-sm-6 col-md-4">
     <div class="thumbnail recipe-card">
       <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
         <img class="pin-icon" src="{{ url_for('static', filename='noun-dough-selected.svg') }}" alt="w">
@@ -46,7 +46,7 @@
 {% if almost and almost|length > 0 %}
 <div class="row recipe-row">
   {% for r in almost %}
-  <div class="col-sm-6 col-md-4">
+  <div class="col-xs-12 col-sm-6 col-md-4">
     <div class="thumbnail recipe-card">
       <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
         <img class="pin-icon" src="{{ url_for('static', filename='noun-dough-selected.svg') }}" alt="W">
