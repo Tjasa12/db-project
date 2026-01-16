@@ -143,7 +143,7 @@ def index():
         SELECT rezept_id, COUNT(*) AS cnt
         FROM Rezept_Likes
         GROUP BY rezept_id
-        """)
+    """)
     like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
 
 
