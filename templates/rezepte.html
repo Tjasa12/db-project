@@ -26,12 +26,10 @@
         <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
         <p>
           <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
-        <form action="{{ url_for('likes_toggle') }}" method="POST" style="display:inline;">
-          <input type="hidden" name="rezept_id" value="{{ r.id }}">
-          <button type="submit" class="btn btn-pink">
+          <a href="/like/{{ r.id }}" class="btn btn-pink">
             ❤️ {{ like_counts.get(r.id, 0) }}
-          </button>
-        </form>
+          </a>
+        </p>
       </div>
     </div>
   </div>
@@ -60,12 +58,9 @@
         <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
         <p>
           <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
-        <form action="{{ url_for('likes_toggle') }}" method="POST" style="display:inline;">
-          <input type="hidden" name="rezept_id" value="{{ r.id }}">
-          <button type="submit" class="btn btn-pink">
+          <a href="/like/{{ r.id }}" class="btn btn-pink">
             ❤️ {{ like_counts.get(r.id, 0) }}
-          </button>
-        </form>
+          </a>
         </p>
       </div>
     </div>

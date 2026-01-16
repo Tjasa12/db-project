@@ -184,7 +184,7 @@ def backstube():
     like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
     return render_template("backstube.html", rezepte=rezepte, like_counts=like_counts)
 
-@app.route("/like/<int:rezept_id>")
+@app.route("/like/<int:rezept_id>", methods=["GET"])
 @login_required
 def like_rezept(rezept_id):
     existing = db_read(
