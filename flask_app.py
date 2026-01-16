@@ -134,9 +134,14 @@ def logout():
 @login_required
 def index():
     # GET
-    Test = "Hallo"
+    sql_all = f"""
+        SELECT r.id, r.titel, r.link, r.website_name,
+        FROM Rezepte r ORDER BY r.titel;
+    """
+    all_rezept = db_read(sql_all)
+
     if request.method == "GET":
-        return render_template("willkommen.html",Template_test=Test)
+        return render_template("willkommen.html",all=all_rezept)
 
 # App routes
 @app.route("/zutaten", methods=["GET", "POST"])
