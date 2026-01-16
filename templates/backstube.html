@@ -4,21 +4,31 @@
 <div>
   <h1>Backstube</h1>
 
+  <div>
   {% if rezepte and rezepte|length > 0 %}
-  <ul class="list-group">
+  <div class="row recipe-row">
     {% for r in rezepte %}
-    <li class="list-group-item">
-      <strong>{{ r.titel }}</strong>
-      <br>
-      <small>{{ r.website_name }}</small>
-      <br>
-      <a href="{{ r.link }}" target="_blank">Zum Rezept</a>
-    </li>
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <div class="thumbnail recipe-card">
+        <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
+          <img class="pin-icon" src="{{ url_for('static', filename='noun-dough-selected.svg') }}" alt="w">
+        </button>
+        <img src="https://via.placeholder.com/400x250?text=Rezept" alt="Rezeptbild">
+        <div class="caption">
+          <h3>{{ r.titel }}</h3>
+          <p>{{ r.website_name }}</p>
+          <p><strong>Fehlende Zutaten: {{ r.missing }}</strong></p>
+          <p>
+            <a href="{{ r.link }}" class="btn btn-primary" target="_blank">Zum Rezept</a>
+            <a href="/like/{{ r.id }}" class="btn btn-pink">
+              ❤️ {{ like_counts.get(r.id, 0) }}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
     {% endfor %}
-  </ul>
-  {% else %}
-  <p><em>Noch keine Rezepte in der Backstube.</em></p>
-  {% endif %}
+  </div>
 
   <a href="/" class="btn btn-secondary">Zurück</a>
 </div>
