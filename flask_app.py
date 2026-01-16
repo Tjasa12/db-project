@@ -176,8 +176,13 @@ def backstube():
         WHERE b.user_id = %s
         ORDER BY b.created_at DESC
     """, (current_user.id,))
-
-    return render_template("backstube.html", rezepte=rezepte)
+    rows = db_read("""
+        SELECT rezept_id, COUNT(*) AS cnt
+        FROM Rezept_Likes
+        GROUP BY rezept_id
+    """)
+    like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
+    return render_template("backstube.html", rezepte=rezepte, like_counts=like_counts)
 
 @app.route("/like/<int:rezept_id>")
 @login_required
