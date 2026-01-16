@@ -1,5 +1,6 @@
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
 from mysql.connector import pooling
 
 # Load .env variables
@@ -8,13 +9,20 @@ DB_CONFIG = {
     "host": os.getenv("DB_HOST"),
     "user": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD"),
-    "database": os.getenv("DB_DATABASE")
+    "database": os.getenv("DB_DATABASE"),
+    "autocommit": True,
+    "connection_timeout": 10,
 }
 
 # Init db
-pool = pooling.MySQLConnectionPool(pool_name="pool", pool_size=5, **DB_CONFIG)
+pool = pooling.MySQLConnectionPool(pool_name="pool", pool_size=3, **DB_CONFIG)
 def get_conn():
-    return pool.get_connection()
+    conn = pool.get_connection()
+    try:
+        conn.ping(reconnect=True, attempts=1, delay=0)
+    except Exception:
+        pass
+    return conn
 
 # DB-Helper
 def db_read(sql, params=None, single=False):
