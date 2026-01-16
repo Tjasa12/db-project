@@ -56,7 +56,6 @@ def webhook():
 def login():
 
     error = None
-
     if request.method == "POST":
         user = authenticate(
             request.form["username"],
