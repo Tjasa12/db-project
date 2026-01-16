@@ -14,9 +14,15 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Twinkle+Star&display=swap" rel="stylesheet">
 
     <style>
-      body { background-color: #e6bfe4; }
+      body { background-color: #e6bfe4;
+        font-family: "Twinkle Star", cursive;
+  font-weight: 400;
+  font-style: normal; }
       .todo-list { margin-top: 30px; list-style: none; padding: 0; }
       .todo-item {
         position: relative; background: #ebbce7;
@@ -61,7 +67,7 @@
     vertical-align: middle;
   }
   .btn-pink {
-  background-color: #ff69b4;   
+  background-color: #ff69b4;
   border-color: #ff69b4;
   color: white;
 }
