@@ -5,14 +5,17 @@
     <h1>Zutatenseite</h1>
 
     <form action="{{ url_for('rezepte') }}" method="POST">
-      {% for z in zutaten %}
-        <div>
-          <label>
-            <input type="checkbox" name="zutat_ids" value="{{ z.id }}">
-            {{ z.name }}
-          </label>
-        </div>
-      {% endfor %}
+
+      <div class="row">
+        {% for z in zutaten %}
+          <div class="col-sm-6">
+            <label>
+              <input type="checkbox" name="zutat_ids" value="{{ z.id }}">
+              {{ z.name }}
+            </label>
+          </div>
+        {% endfor %}
+      </div>
 
       <br>
       <button type="submit" class="btn btn-pink">Rezepte anzeigen</button>
