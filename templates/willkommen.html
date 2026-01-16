@@ -18,7 +18,10 @@
         <button class="pin-btn" data-rezept-id="{{ r.id }}" title="Zur Backstube hinzufügen">
           <img class="pin-icon" src="{{ url_for('static', filename='noun-dough-selected.svg') }}" alt="w">
         </button>
-        <img src="{{ url_for('static', filename='bilder/' ~ r.id ~ '.png') }}" alt="Rezeptbild">
+        <div class="recipe-image">
+          <img src="{{ url_for('static', filename='bilder/' ~ r.id ~ '.png') }}" alt="Rezeptbild">
+        </div>
+
         <div class="caption">
           <h3>{{ r.titel }}</h3>
           <p>{{ r.website_name }}</p>

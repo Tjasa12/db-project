@@ -158,6 +158,23 @@
       border-color: #ff4fa3;
       color: white;
     }
+
+    .recipe-image {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      /* 2:1 ratio */
+      overflow: hidden;
+      background: #eee;
+    }
+
+    .recipe-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* crop instead of stretch */
+      object-position: center;
+      display: block;
+    }
   </style>
 </head>
 
