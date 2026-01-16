@@ -12,7 +12,7 @@
 <h2>✅ Passende Rezepte (0 fehlende Zutaten)</h2>
 
 {% if exact and exact|length > 0 %}
-<div class="row">
+<div class="row recipe-row">
   {% for r in exact %}
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail recipe-card">
@@ -44,7 +44,7 @@
 <h2>🟡 Fast passende Rezepte (brauchen noch Zutaten)</h2>
 
 {% if almost and almost|length > 0 %}
-<div class="row">
+<div class="row recipe-row">
   {% for r in almost %}
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail recipe-card">

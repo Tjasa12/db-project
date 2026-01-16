@@ -95,31 +95,31 @@
       position: relative;
     }
 
-    .row {
+    .recipe-row {
       display: flex;
       flex-wrap: wrap;
     }
 
-    .row>[class*="col-"] {
+    .recipe-row>[class*="col-"] {
       display: flex;
     }
 
 
-    .thumbnail.recipe-card {
+    .recipe-row .thumbnail.recipe-card {
       display: flex;
       flex-direction: column;
       width: 100%;
     }
 
 
-    .thumbnail .caption {
+    .recipe-row .thumbnail .caption {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
 
 
-    .thumbnail .caption p:last-child {
+    .recipe-row.thumbnail .caption p:last-child {
       margin-top: auto;
     }
 
