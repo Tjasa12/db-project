@@ -139,8 +139,11 @@ def index():
     """
     all_rezept = db_read(sql_all)
 
+    rows = db_read("SELECT rezept_id, COUNT(*) FROM Rezept_Likes GROUP BY rezept_id")
+    like_counts = {rid: c for (rid, c) in rows} if rows else {}
+
     if request.method == "GET":
-        return render_template("willkommen.html",all=all_rezept)
+        return render_template("willkommen.html",all=all_rezept, like_counts=like_counts)
 
 # App routes
 @app.route("/zutaten", methods=["GET", "POST"])
