@@ -139,12 +139,12 @@ def index():
     """
     all_rezept = db_read(sql_all)
 
-   rows = db_read("""
-    SELECT rezept_id, COUNT(*) AS cnt
-    FROM Rezept_Likes
-    GROUP BY rezept_id
-""")
-like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
+    rows = db_read("""
+        SELECT rezept_id, COUNT(*) AS cnt
+        FROM Rezept_Likes
+        GROUP BY rezept_id
+        """)
+    like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
 
 
     if request.method == "GET":
@@ -182,11 +182,24 @@ def backstube():
 @app.route("/like/<int:rezept_id>")
 @login_required
 def like_rezept(rezept_id):
-    db_write(
-        "INSERT INTO Rezept_Likes (user_id,rezept_id) VALUES (%s, %s)",
-        (current_user.id, rezept_id)
+    existing = db_read(
+        "SELECT 1 FROM Rezept_Likes WHERE user_id=%s AND rezept_id=%s",
+        (current_user.id, rezept_id),
+        single=True
     )
-    return redirect(request.referrer)
+
+    if existing:
+        db_write(
+            "DELETE FROM Rezept_Likes WHERE user_id=%s AND rezept_id=%s",
+            (current_user.id, rezept_id)
+        )
+    else:
+        db_write(
+            "INSERT INTO Rezept_Likes (user_id, rezept_id) VALUES (%s, %s)",
+            (current_user.id, rezept_id)
+        )
+
+    return redirect(request.referrer or url_for("index"))
 
 
 @app.route("/rezepte", methods=["POST"])
@@ -225,18 +238,17 @@ def rezepte():
             (COUNT(*) - SUM(rz.zutat_id IN ({placeholders}))) AS missing
         FROM Rezepte r
         JOIN Rezept_Zutaten rz ON rz.rezept_id = r.id
-        GROUP BY r.id, r.titel, r.link, r.website_name
         HAVING missing > 0
         ORDER BY missing ASC, r.titel
         LIMIT 10;
     """
     almost = db_read(sql_almost, tuple(selected_ids))
     rows = db_read("""
-    SELECT rezept_id, COUNT(*) AS cnt
-    FROM Rezept_Likes
-    GROUP BY rezept_id
-""")
-like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
+        SELECT rezept_id, COUNT(*) AS cnt
+        FROM Rezept_Likes
+        GROUP BY rezept_id
+    """)
+    like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
 
     return render_template(
         "rezepte.html",
