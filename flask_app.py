@@ -243,6 +243,7 @@ def rezepte():
             (COUNT(*) - SUM(rz.zutat_id IN ({placeholders}))) AS missing
         FROM Rezepte r
         JOIN Rezept_Zutaten rz ON rz.rezept_id = r.id
+        GROUP BY r.id, r.titel, r.link, r.website_name
         HAVING missing > 0
         ORDER BY missing ASC, r.titel
         LIMIT 10;
@@ -253,6 +254,7 @@ def rezepte():
         FROM Rezept_Likes
         GROUP BY rezept_id
     """)
+
     like_counts = {row["rezept_id"]: row["cnt"] for row in rows} if rows else {}
 
     return render_template(
